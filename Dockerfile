@@ -38,28 +38,29 @@ ARG UNAME
 ARG UID
 ARG GNAME
 ARG GID
-RUN set -x; \
-    # These commands are allowed to fail (it happens for root, for example).
-    # The result will be checked in the next RUN.
-    userdel -r `getent passwd ${UID} | cut -d : -f 1` > /dev/null 2>&1; \
-    groupdel -f `getent group ${GID} | cut -d : -f 1` > /dev/null 2>&1; \
-    groupadd -g ${GID} ${GNAME}; \
-    useradd -u $UID -g $GID -G sudo -ms /bin/bash ${UNAME}; \
-    mkdir /src; \
-    chown -R ${UNAME}:${GNAME} /src; \
-    mkdir /out; \
-    chown -R ${UNAME}:${GNAME} /out; \
-    echo "${UNAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+# RUN set -x; \
+#     # These commands are allowed to fail (it happens for root, for example).
+#     # The result will be checked in the next RUN.
+#     userdel -r `getent passwd ${UID} | cut -d : -f 1` > /dev/null 2>&1; \
+#     groupdel -f `getent group ${GID} | cut -d : -f 1` > /dev/null 2>&1; \
+#     groupadd -g ${GID} ${GNAME}; \
+#     useradd -u $UID -g $GID -G sudo -ms /bin/bash ${UNAME}; \
+#     mkdir /src; \
+#     chown -R ${UNAME}:${GNAME} /src; \
+#     mkdir /out; \
+#     chown -R ${UNAME}:${GNAME} /out; \
+#     echo "${UNAME} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-USER ${UNAME}:${GNAME}
+# USER ${UNAME}:${GNAME}
 WORKDIR /src
 
 RUN set -ex; \
-    id | grep "uid=${UID}(${UNAME}) gid=${GID}(${GNAME})"; \
-    sudo ls; \
-    pwd | grep "^/src"; \
+    # id | grep "uid=${UID}(${UNAME}) gid=${GID}(${GNAME})"; \
+    # sudo ls; \
+    # pwd | grep "^/src"; \
     touch /src/test; \
     rm /src/test; \
+    mkdir /out; \
     touch /out/test; \
     rm /out/test
 
